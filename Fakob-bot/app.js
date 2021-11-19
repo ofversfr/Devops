@@ -1,57 +1,21 @@
-/*
-const { App } = require("@slack/bolt");
-require("dotenv").config();
-// Initializes your app with your bot token and signing secret
-const app = new App({
-    token: process.env.SLACK_BOT_TOKEN,
-    signingSecret: process.env.SLACK_SIGNING_SECRET,
-    socketMode:true, // enable the following to use socket mode
-    appToken: process.env.APP_TOKEN
-  });
 
 
-const { App } = require("@slack/bolt");
+const { App, ExpressReceiver } = require("@slack/bolt");
 require("dotenv").config();
 // Initializes your app with your bot token and signing secret
+const receiver = new ExpressReceiver({signingSecret: process.env.SLACK_SIGNING_SECRET});
+
 const app = new App({
   token: process.env.SLACK_BOT_TOKEN,
   signingSecret: process.env.SLACK_SIGNING_SECRET,
+  receiver
 });
 
-app.command("/knowledge", async ({ command, ack, say }) => {
-    try {
-      await ack();
-      say("Yaaay! that command works!");
-    } catch (error) {
-        console.log("err")
-      console.error(error);
-    }
-});
 
-(async () => {
-  const port = 3000
-  // Start your app
-  await app.start(process.env.PORT || port);
-  console.log(`⚡️ Slack Bolt app is running on port ${port}!`);
-})();
-*/
 
-const { App } = require("@slack/bolt");
-require("dotenv").config();
-// Initializes your app with your bot token and signing secret
-const app = new App({
-  token: process.env.SLACK_BOT_TOKEN,
-  signingSecret: process.env.SLACK_SIGNING_SECRET,
-});
-
-app.command("/knowledge", async ({ command, ack, say }) => {
-  try {
-    await ack();
-    say("Yaaay! that command works!");
-  } catch (error) {
-      console.log("err")
-    console.error(error);
-  }
+receiver.router.post("/knowledge", (req,res) => {
+  let body = "Hellooo";
+  return res.send(body);
 });
 
 
